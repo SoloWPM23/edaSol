@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edaSol"
+version = "0.1.0"
+description = "Library to help accelerataing Exploratory Data Analysis (EDA)"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Solo Manurung", email = "solowandika490@gmail.com"}
+]
+dependencies = [
+    "pandas>=1.5.0",
+    "matplotlib>=3.5.0",
+    "seaborn>=0.11.0",
+    "numpy>=1.20.0"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+[project.urls]
+Homepage = "https://github.com/SoloWPM23/edaSol"
