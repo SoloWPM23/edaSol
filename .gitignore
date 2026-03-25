@@ -1,25 +1,57 @@
-# Virtual Environment
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Virtual Environment ---
 venv/
 ENV/
 env/
 .venv/
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.egg-info/
-dist/
-build/
-
-# IDE
+# --- IDE & Editor ---
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
-# Data files (opsional, jika ada data sensitif)
+# --- Jupyter Notebook ---
+.ipynb_checkpoints/
+
+# --- Data Science & Data ---
 *.csv
 *.xlsx
+*.parquet
+*.feather
+*.h5
 *.pkl
+*.joblib
+data/
+datasets/
+
+# --- Environment Variables ---
 .env
+.env.local
+*.env
+
+# --- OS ---
+.DS_Store         # macOS
+Thumbs.db         # Windows

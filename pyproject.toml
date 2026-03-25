@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "edaSol"
 version = "0.1.0"
-description = "Library to help accelerataing Exploratory Data Analysis (EDA)"
+description = "Library to help accelerating Exploratory Data Analysis (EDA)"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
