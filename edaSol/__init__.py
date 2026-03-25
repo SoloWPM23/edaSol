@@ -35,7 +35,7 @@ from .visuals import (
     plot_pairplot
 )
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Solo Manurung"
 
 __all__ = [
