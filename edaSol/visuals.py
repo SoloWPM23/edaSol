@@ -1,11 +1,24 @@
 """
 Visualization functions for edaSol EDA library.
 """
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+
+
+def _validateColumns(df: pd.DataFrame, columns: Optional[List[str]]) -> None:
+    """
+    Validasi dasar untuk fungsi visual: pastikan input berupa DataFrame dan,
+    jika kolom disebut eksplisit, pastikan semua kolom tersebut ada.
+    """
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("Input must be a pandas DataFrame")
+    if columns is not None:
+        missing = [col for col in columns if col not in df.columns]
+        if missing:
+            raise ValueError(f"Columns not found: {missing}")
 
 
 def plot_numerical_dist(
@@ -40,6 +53,8 @@ def plot_numerical_dist(
     >>> df = pd.DataFrame({'A': [1, 2, 3, 4], 'B': [5, 6, 7, 8]})
     >>> plot_numerical_dist(df)
     """
+    _validateColumns(df, columns)
+
     if columns is None:
         num_cols = df.select_dtypes(include=['number']).columns.tolist()
     else:
@@ -55,8 +70,6 @@ def plot_numerical_dist(
     fig, axes = plt.subplots(n_rows, n_cols, figsize=(figsize[0], figsize[1] * n_rows))
 
     # Flatten axes for consistent iteration
-    if n_rows == 1 and n_cols == 1:
-        axes = np.array([axes])
     axes = axes.flatten() if hasattr(axes, 'flatten') else [axes]
 
     for i, col in enumerate(num_cols):
@@ -73,6 +86,7 @@ def plot_numerical_dist(
 
     if show:
         plt.show()
+        plt.close(fig)  # Tutup figure agar tidak menumpuk di memori saat dipanggil berulang
         return None
     return fig
 
@@ -112,6 +126,8 @@ def plot_correlation_heatmap(
     >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
     >>> plot_correlation_heatmap(df)
     """
+    _validateColumns(df, None)
+
     num_df = df.select_dtypes(include=['number'])
     if num_df.shape[1] < 2:
         print("Need at least 2 numeric columns for correlation.")
@@ -142,6 +158,7 @@ def plot_correlation_heatmap(
 
     if show:
         plt.show()
+        plt.close(fig)  # Tutup figure agar tidak menumpuk di memori saat dipanggil berulang
         return None
     return fig
 
@@ -176,6 +193,8 @@ def plot_missing_matrix(
     >>> df = pd.DataFrame({'A': [1, None, 3], 'B': [None, 2, 3]})
     >>> plot_missing_matrix(df)
     """
+    _validateColumns(df, None)
+
     fig, ax = plt.subplots(figsize=figsize)
 
     # True = Missing (red), False = Present (light gray)
@@ -200,6 +219,7 @@ def plot_missing_matrix(
 
     if show:
         plt.show()
+        plt.close(fig)  # Tutup figure agar tidak menumpuk di memori saat dipanggil berulang
         return None
     return fig
 
@@ -240,6 +260,8 @@ def plot_categorical_dist(
     >>> df = pd.DataFrame({'color': ['red', 'blue', 'red', 'green', 'blue']})
     >>> plot_categorical_dist(df)
     """
+    _validateColumns(df, columns)
+
     if columns is None:
         cat_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
     else:
@@ -255,8 +277,6 @@ def plot_categorical_dist(
     fig, axes = plt.subplots(n_rows, n_cols, figsize=(figsize[0], figsize[1] * n_rows))
 
     # Flatten axes for consistent iteration
-    if n_rows == 1 and n_cols == 1:
-        axes = np.array([axes])
     axes = axes.flatten() if hasattr(axes, 'flatten') else [axes]
 
     for i, col in enumerate(cat_cols):
@@ -279,6 +299,7 @@ def plot_categorical_dist(
 
     if show:
         plt.show()
+        plt.close(fig)  # Tutup figure agar tidak menumpuk di memori saat dipanggil berulang
         return None
     return fig
 
@@ -315,6 +336,8 @@ def plot_boxplots(
     >>> df = pd.DataFrame({'A': [1, 2, 3, 100, 4], 'B': [5, 6, 7, 8, 9]})
     >>> plot_boxplots(df)
     """
+    _validateColumns(df, columns)
+
     if columns is None:
         num_cols = df.select_dtypes(include=['number']).columns.tolist()
     else:
@@ -330,8 +353,6 @@ def plot_boxplots(
     fig, axes = plt.subplots(n_rows, n_cols, figsize=(figsize[0], figsize[1] * n_rows))
 
     # Flatten axes for consistent iteration
-    if n_rows == 1 and n_cols == 1:
-        axes = np.array([axes])
     axes = axes.flatten() if hasattr(axes, 'flatten') else [axes]
 
     for i, col in enumerate(num_cols):
@@ -348,6 +369,7 @@ def plot_boxplots(
 
     if show:
         plt.show()
+        plt.close(fig)  # Tutup figure agar tidak menumpuk di memori saat dipanggil berulang
         return None
     return fig
 
@@ -388,6 +410,8 @@ def plot_pairplot(
     >>> df = pd.DataFrame({'A': [1, 2, 3, 4], 'B': [5, 6, 7, 8], 'C': [9, 10, 11, 12]})
     >>> plot_pairplot(df)
     """
+    _validateColumns(df, columns)
+
     if columns is None:
         num_cols = df.select_dtypes(include=['number']).columns.tolist()
         # Limit to first 5 columns for performance
@@ -416,5 +440,6 @@ def plot_pairplot(
 
     if show:
         plt.show()
+        plt.close(g.fig)  # Tutup figure agar tidak menumpuk di memori saat dipanggil berulang
         return None
     return g

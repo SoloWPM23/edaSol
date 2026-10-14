@@ -45,12 +45,15 @@ def quick_summary(
             raise ValueError(f"Columns not found: {missing}")
         df = df[columns]
 
+    # Guard pembagian nol: DataFrame tanpa baris menghasilkan NaN/inf jika dibagi len(df)
+    n_rows = len(df)
+    null_count = df.isnull().sum()
     summary = pd.DataFrame({
         'Data Type': df.dtypes,
-        'Null Count': df.isnull().sum(),
-        'Null Percent': (df.isnull().sum() / len(df) * 100).round(2),
+        'Null Count': null_count,
+        'Null Percent': (null_count / n_rows * 100).round(2) if n_rows > 0 else 0.0,
         'Unique Count': df.nunique(),
-        'Sample Value': df.iloc[0] if len(df) > 0 else None
+        'Sample Value': df.iloc[0] if n_rows > 0 else None
     })
 
     return summary
@@ -75,8 +78,8 @@ def detect_outliers_iqr(
 
     Returns
     -------
-    list of int
-        Index positions of outlier rows.
+    list
+        Index labels of outlier rows.
     tuple of (list, float, float)
         If return_bounds=True: (outlier_indices, lower_bound, upper_bound).
 
@@ -93,8 +96,15 @@ def detect_outliers_iqr(
     >>> detect_outliers_iqr(df, 'values')
     [3]
     """
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("Input must be a pandas DataFrame")
+
     if column not in df.columns:
         raise ValueError(f"Column '{column}' not found in DataFrame.")
+
+    # IQR hanya valid untuk kolom numerik; cegah error quantile yang membingungkan
+    if not pd.api.types.is_numeric_dtype(df[column]):
+        raise TypeError(f"Column '{column}' must be numeric for IQR outlier detection.")
 
     Q1 = df[column].quantile(0.25)
     Q3 = df[column].quantile(0.75)
@@ -248,9 +258,12 @@ def data_quality_report(df: pd.DataFrame) -> dict:
         raise TypeError("Input must be a pandas DataFrame")
 
     # Missing values analysis
+    # Guard pembagian nol: DataFrame tanpa baris menghasilkan NaN/inf jika dibagi len(df)
+    n_rows = len(df)
+    null_count = df.isnull().sum()
     missing_df = pd.DataFrame({
-        'Null Count': df.isnull().sum(),
-        'Null Percent': (df.isnull().sum() / len(df) * 100).round(2),
+        'Null Count': null_count,
+        'Null Percent': (null_count / n_rows * 100).round(2) if n_rows > 0 else 0.0,
         'Non-Null Count': df.notnull().sum()
     })
     missing_df = missing_df[missing_df['Null Count'] > 0].sort_values(
