@@ -1,6 +1,6 @@
 # edaSol
 
-[![PyPI version](https://img.shields.io/pypi/v/edasol.svg)](https://pypi.org/project/edasol/)
+[![PyPI version](https://img.shields.io/pypi/v/edasol.svg)](https://pypi.org/project/edasol/) 
 [![Python versions](https://img.shields.io/pypi/pyversions/edasol.svg)](https://pypi.org/project/edasol/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
